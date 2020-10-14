@@ -1,0 +1,44 @@
+.container {
+  width: 800px;
+}
+
+.main-content {
+  border: 1px solid black;
+  height: 300px;
+}
+
+.secondary-content {
+  border: 1px solid red;
+}
+
+form {
+  width: 50%;
+  margin: auto;
+  margin-bottom: 15px;
+}
+.days {
+  border: 1px solid green;
+  height: 100px;
+}
+
+img {
+  width: 300px;
+}
+h1 {
+  text-align: center;
+}
+.main-info {
+  width: 100%;
+}
+
+td {
+  width: 30px;
+  border: 1px solid black;
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
