@@ -8,6 +8,7 @@ const img = document.querySelector("img");
 const days_temp = document.querySelectorAll(".days_temp");
 const hour = document.querySelectorAll(".hour");
 const day = document.querySelectorAll(".day");
+const day_temp_max = document.querySelectorAll(".days_temp_Max");
 
 //On récupère les données pour avoir les latitues, longitudes et le nom
 const getLatLongData = async (city = "Neerheylissem") => {
@@ -62,6 +63,9 @@ const updateUiData = (data) => {
     days_temp[i].innerHTML = `${Math.trunc(
       data.daily[i].temp.min
     )}<span>&#8451</span> Min`;
+    day_temp_max[i].innerHTML = `${Math.trunc(
+      data.daily[i].temp.max
+    )}<span>&#8451</span> Max`;
     // hour[i - 1].innerHTML = `${data.list[i].dt_txt.slice(10, 13)}h`;
     if (i === 7) {
       day[i].innerHTML = jourActuelle;
@@ -102,17 +106,18 @@ cityForm.addEventListener("submit", (e) => {
 
 const semaine = [
   "lundi",
-  "mardi",
-  "mercredi",
-  "jeudi",
-  "vendredi",
-  "samedi",
-  "dimanche",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+  "Dimanche",
 ];
 
 let date = new Date();
 let options = { weekday: "long" };
 let jourActuelle = date.toLocaleDateString("fr-FR", options);
+jourActuelle = jourActuelle.charAt(0).toUpperCase() + jourActuelle.slice(1);
 
 console.log(jourActuelle);
 
