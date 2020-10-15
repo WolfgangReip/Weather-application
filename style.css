@@ -75,3 +75,8 @@ td {
 p {
   margin: 0;
 }
+
+.day {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
