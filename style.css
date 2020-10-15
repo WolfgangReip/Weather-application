@@ -1,28 +1,56 @@
+body {
+  color: white;
+  background-color: #ddddd8;
+  font-family: Arial, Helvetica, sans-serif;
+}
 .container {
+  margin-top: 40px;
   width: 800px;
+  background: linear-gradient(45deg, #3e4df0, #e66465);
+  border: 1px solid;
+  box-shadow: 15px 15px 8px #888888;
 }
 
+h1 {
+  color: white;
+}
 .main-content {
-  border: 1px solid black;
+  border: 1px solid white;
   height: 300px;
+  padding: 0;
 }
 
+.location {
+  font-size: 25px;
+  font-weight: bold;
+}
+.temperature {
+  font-size: 40px;
+  font-weight: bolder;
+  margin: 0em;
+}
 .secondary-content {
-  border: 1px solid red;
+  border: 1px solid white;
+  padding: 0;
 }
 
+.description {
+  margin: 0;
+  font-size: 25px;
+  font-weight: bold;
+}
 form {
-  width: 50%;
+  width: 40%;
   margin: auto;
   margin-bottom: 15px;
 }
 .days {
-  border: 1px solid green;
+  border-right: 1px solid white;
   height: 100px;
 }
 
 img {
-  width: 300px;
+  width: 250px;
 }
 h1 {
   text-align: center;
@@ -33,7 +61,6 @@ h1 {
 
 td {
   width: 30px;
-  border: 1px solid black;
 }
 
 .days {
@@ -41,4 +68,5 @@ td {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 150px;
 }
