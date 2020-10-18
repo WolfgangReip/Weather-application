@@ -24,7 +24,7 @@ h1 {
 }
 
 .daily {
-    margin-top: 45px;
+    margin-top: 40px;
 }
 
 .location {
@@ -70,7 +70,7 @@ td {
 
 .days {
     border-right: 1px solid white;
-    height: 100px;
+    height: 100px !important;
     display: flex;
     flex-direction: column;
     justify-content: center;
