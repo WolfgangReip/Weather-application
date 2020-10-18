@@ -11,6 +11,7 @@ const day = document.querySelectorAll(".day");
 const day_temp_max = document.querySelectorAll(".days_temp_Max");
 const humidity = document.querySelector(".humidity");
 const vent = document.querySelector(".vent");
+const date_html = document.querySelector(".date");
 
 let hours = [];
 
@@ -55,7 +56,132 @@ getLatLongData().then((data) => {
         return degres;
     };
 
-    console.log(degre(data));
+    chart(data);
+
+    let { lattitude, longitude } = getLatLong(data);
+
+    getForecastData(lattitude, longitude).then((data) => {
+        updateUiData(data);
+    });
+});
+
+const getLatLong = (data) => {
+    let latData = data.city.coord.lat;
+    let longData = data.city.coord.lon;
+
+    return {
+        latData,
+        longData,
+    };
+};
+
+const chart = (data) => {
+    let timezone = data.city.timezone;
+
+    timezone = timezone / 60 / 60;
+    console.log(timezone);
+
+    const test = (data) => {
+        let hours = [];
+
+        if (timezone < 0) {
+            for (i = 0; i < 8; i++) {
+                if (
+                    parseInt(data.list[i].dt_txt.slice(11, 13)) +
+                        (timezone - 2) <
+                    0
+                ) {
+                    hours.push(
+                        `${
+                            parseInt(data.list[i].dt_txt.slice(11, 13)) +
+                            (timezone - 2) +
+                            24
+                        }h`
+                    );
+                } else if (
+                    parseInt(data.list[i].dt_txt.slice(11, 13)) +
+                        (timezone - 2) ===
+                    0
+                ) {
+                    let qwerty = parseInt(data.list[i].dt_txt.slice(11, 13));
+                    qwerty = "00";
+                    hours.push(`${qwerty}h`);
+                } else {
+                    hours.push(
+                        `${
+                            parseInt(data.list[i].dt_txt.slice(11, 13)) +
+                            (timezone - 2)
+                        }h`
+                    );
+                }
+            }
+        } else {
+            if (timezone === 0) {
+                for (let j = 0; j < 8; j++) {
+                    hours.push(
+                        `${parseInt(data.list[j].dt_txt.slice(11, 13)) - 2}h`
+                    );
+                }
+            } else if (timezone === 1) {
+                for (let m = 0; m < 8; m++) {
+                    hours.push(
+                        `${parseInt(data.list[m].dt_txt.slice(11, 13)) - 1}h`
+                    );
+                }
+            } else if (timezone === 2) {
+                for (let k = 0; k < 8; k++) {
+                    hours.push(
+                        `${parseInt(data.list[k].dt_txt.slice(11, 13))}h`
+                    );
+                }
+            } else {
+                for (let p = 0; p < 8; p++) {
+                    if (
+                        parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                            (timezone - 2) ===
+                            24 ||
+                        parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                            (timezone - 2) ===
+                            0
+                    ) {
+                        let azerty =
+                            parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                            (timezone - 2);
+                        azerty = "00";
+                        hours.push(`${azerty}h`);
+                    } else if (
+                        parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                            (timezone - 2) >
+                        24
+                    ) {
+                        hours.push(
+                            `${
+                                parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                                (timezone - 2 - 24)
+                            }h`
+                        );
+                    } else {
+                        hours.push(
+                            `${
+                                parseInt(data.list[p].dt_txt.slice(11, 13)) +
+                                (timezone - 2)
+                            }h`
+                        );
+                    }
+                }
+            }
+        }
+
+        return hours;
+    };
+
+    const degre = (data) => {
+        let degres = [];
+        for (i = 0; i < 8; i++) {
+            degres.push(parseInt(Math.trunc(data.list[i].main.temp)));
+        }
+        return degres;
+    };
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx, {
@@ -101,6 +227,7 @@ getLatLongData().then((data) => {
                             callback: function (value) {
                                 return value + "°C";
                             },
+                            precision: 0,
                         },
                         gridLines: {
                             drawBorder: true,
@@ -125,23 +252,6 @@ getLatLongData().then((data) => {
             },
         },
     });
-    console.log(myChart.data.labels);
-
-    let { lattitude, longitude } = getLatLong(data);
-
-    getForecastData(lattitude, longitude).then((data) => {
-        updateUiData(data);
-    });
-});
-
-const getLatLong = (data) => {
-    let latData = data.city.coord.lat;
-    let longData = data.city.coord.lon;
-
-    return {
-        latData,
-        longData,
-    };
 };
 
 const updateUiData = (data) => {
@@ -187,12 +297,14 @@ cityForm.addEventListener("submit", (e) => {
     cityForm.reset();
 
     getLatLongData(city).then((data) => {
-        console.log(data);
         updateName(data);
+        chart(data);
+        console.log(data);
         const { latData, longData } = getLatLong(data);
 
         getForecastData(latData, longData).then((data) => {
             console.log(data);
+
             updateUiData(data);
         });
     });
@@ -212,6 +324,38 @@ let date = new Date();
 let options = { weekday: "long" };
 let jourActuelle = date.toLocaleDateString("fr-FR", options);
 jourActuelle = jourActuelle.charAt(0).toUpperCase() + jourActuelle.slice(1);
+
+const time = () => {
+    let date = new Date();
+    let options2 = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    };
+    jourActuel2 = date.toLocaleString("Fr", options2);
+
+    let res = jourActuel2.split(" ");
+
+    for (i = 0; i < res.length; i++) {
+        if (i === 0) {
+            res[i] = res[i].charAt(0).toUpperCase() + res[i].slice(1);
+        }
+        if (i === 2) {
+            res[i] = res[i].charAt(0).toUpperCase() + res[i].slice(1);
+        }
+    }
+
+    res = res.join(" ");
+
+    date_html.innerHTML = res;
+};
+setInterval(function () {
+    time();
+}, 1000);
 
 let semaineOrdre = semaine
     .slice(semaine.indexOf(jourActuelle))
