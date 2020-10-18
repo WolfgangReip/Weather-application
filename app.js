@@ -19,7 +19,7 @@ let hours = [];
 const getLatLongData = async (city = "Neerheylissem") => {
     const response = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&lang=FR&appid=${APIkey}
-    `
+        `
     );
     const data = await response.json();
     return data;
@@ -27,13 +27,17 @@ const getLatLongData = async (city = "Neerheylissem") => {
 
 // On récupère les données météos générale pour l'actuelle et les prévisions
 const getForecastData = async (lat = "50.7568", lon = "4.989") => {
-    const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=FR&callbackexclude={part}&appid=${APIkey}
-
-    `
-    );
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=FR&callbackexclude={part}&appid=${APIkey}
+    
+        `
+        );
+        const data = await response.json();
+        return data;
+    } catch (err) {
+        return response.status(400).send(error);
+    }
 };
 
 //Avec les données récupérées de coordonnées et de nom, on va updater le nom (et les heures en dessous) On va également à l'aide de ces données appeler la fonction avec les lattitudes et longitudes nouvellement acquise pour récupérer les données météos actuelles et prévisionnelles et ensuite appeler la fonction pour mettre à jour les données météo
@@ -79,7 +83,6 @@ const chart = (data) => {
     let timezone = data.city.timezone;
 
     timezone = timezone / 60 / 60;
-    console.log(timezone);
 
     const test = (data) => {
         let hours = [];
@@ -299,12 +302,10 @@ cityForm.addEventListener("submit", (e) => {
     getLatLongData(city).then((data) => {
         updateName(data);
         chart(data);
-        console.log(data);
+
         const { latData, longData } = getLatLong(data);
 
         getForecastData(latData, longData).then((data) => {
-            console.log(data);
-
             updateUiData(data);
         });
     });
