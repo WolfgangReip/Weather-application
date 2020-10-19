@@ -312,7 +312,7 @@ cityForm.addEventListener("submit", (e) => {
 });
 
 const semaine = [
-    "lundi",
+    "Lundi",
     "Mardi",
     "Mercredi",
     "Jeudi",
@@ -335,7 +335,6 @@ const time = () => {
         day: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",
     };
     jourActuel2 = date.toLocaleString("Fr", options2);
 
@@ -351,12 +350,12 @@ const time = () => {
     }
 
     res = res.join(" ");
-
     date_html.innerHTML = res;
 };
+time();
 setInterval(function () {
     time();
-}, 1000);
+}, 60000);
 
 let semaineOrdre = semaine
     .slice(semaine.indexOf(jourActuelle))
